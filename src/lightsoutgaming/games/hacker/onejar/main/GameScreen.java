@@ -1,7 +1,11 @@
 package lightsoutgaming.games.hacker.onejar.main;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
+
+import javax.swing.JTextArea;
 
 import taz40.lightsoutgamingengine.V1.Screen;
 import taz40.lightsoutgamingengine.V1.ScreenFactory;
@@ -12,23 +16,22 @@ public class GameScreen extends Screen {
 		super(screenfactory);
 		// TODO Auto-generated constructor stub
 	}
+	
 
 	@Override
 	public void onCustomCreate() {
-		// TODO Auto-generated method stub
-		
+		this.addEntity(new TextArea(this,10,10, 780, 500));
 	}
 
 	@Override
 	public void onCustomDestroy() {
 		// TODO Auto-generated method stub
-
+		//screenfactory.getGame().gamethread.remove(jtext);
 	}
 
 	@Override
-	public void onCustomDraw(Graphics2D arg0) {
+	public void onCustomDraw(Graphics2D g) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override

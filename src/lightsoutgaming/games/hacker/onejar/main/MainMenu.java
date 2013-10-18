@@ -2,7 +2,7 @@ package lightsoutgaming.games.hacker.onejar.main;
 
 import java.awt.Graphics2D;
 
-import lightsoutgaming.lifeless.textures.textureclass;
+import lightsoutgaming.hacker.textures.textureclass;
 
 import taz40.lightsoutgamingengine.V1.Button;
 import taz40.lightsoutgamingengine.V1.Function;
