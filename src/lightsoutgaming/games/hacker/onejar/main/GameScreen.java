@@ -21,6 +21,7 @@ public class GameScreen extends Screen {
 	@Override
 	public void onCustomCreate() {
 		this.addEntity(new TextArea(this,10,10, 780, 500));
+		this.addEntity(new TextBox(this,10,515, 780, 20));
 	}
 
 	@Override

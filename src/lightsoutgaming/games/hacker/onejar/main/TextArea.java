@@ -6,7 +6,7 @@ import java.awt.Graphics2D;
 import taz40.lightsoutgamingengine.V1.Entity;
 import taz40.lightsoutgamingengine.V1.Screen;
 
-public class TextArea extends Entity {
+public class TextArea extends Entity implements Receiver {
 
 	public TextArea(Screen screen, int X, int Y, int W, int H) {
 		super(screen);
@@ -17,12 +17,15 @@ public class TextArea extends Entity {
 		height = H;
 	}
 	
+	String[] text = new String[50];
 	int x, y, width, height;
 
 	@Override
 	public void onCustomCreate() {
 		// TODO Auto-generated method stub
-		
+		for(int i = 0; i < 50; i++){
+			text[i] = ""+i;
+		}
 	}
 
 	@Override
@@ -34,12 +37,22 @@ public class TextArea extends Entity {
 	@Override
 	public void onCustomDraw(Graphics2D g) {
 		// TODO Auto-generated method stub
-		g.setBackground(Color.black);
+		g.setColor(Color.black);
 		g.fillRect(x, y, width, height);
+		g.setColor(Color.green);
+		for(int i = 0; i < 50; i++){
+			g.drawString(text[i], 11, (i*10)+20);
+		}
 	}
 
 	@Override
 	public void onCustomUpdate() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void Received(Object o, String msg) {
 		// TODO Auto-generated method stub
 		
 	}
