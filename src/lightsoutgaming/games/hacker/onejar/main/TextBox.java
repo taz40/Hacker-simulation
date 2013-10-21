@@ -72,7 +72,15 @@ public class TextBox extends Entity {
 				underscoretime += timepassed;
 				prevtime = new Date().getTime();
 			}
-			}
+		}
+		
+		Integer[] keys = screen.getScreenFactory().getGame().getKeyboardListener().getPressedKeys();
+		
+		for(int i = 0; i < keys.length; i++){
+			
+		}
+		
+		
 		}
 			if(screen.getScreenFactory().getGame().getMousePadListener().isMousePressed()){
 				int crx = screen.getScreenFactory().getGame().getMousePadListener().getX();
