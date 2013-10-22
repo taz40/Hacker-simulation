@@ -2,6 +2,7 @@ package lightsoutgaming.games.hacker.onejar.main;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
 import java.util.Date;
 
 import taz40.lightsoutgamingengine.V1.Entity;
@@ -18,6 +19,8 @@ public class TextBox extends Entity {
 		height = H;
 	}
 	
+	int interval = 0;
+	char[] string = new char[256];
 	int underscoretime;
 	boolean underscore = true;
 	int x,y,width,height;
@@ -46,6 +49,13 @@ public class TextBox extends Entity {
 		if(underscore && hasfocus){
 			g.drawString("_", x+xoffset, y+15);
 		}
+		
+		int number = 0;
+		for(int i = 0; i < string.length; i++){
+			g.drawString(""+string[i], x+5+(number*10), y+15);
+			number++;
+		}
+		
 	}
 
 	@Override
@@ -77,7 +87,19 @@ public class TextBox extends Entity {
 		Integer[] keys = screen.getScreenFactory().getGame().getKeyboardListener().getPressedKeys();
 		
 		for(int i = 0; i < keys.length; i++){
-			
+			if(keys[i] != null){
+				switch(keys[i]){
+					case KeyEvent.VK_BACK_SPACE:
+						
+					break;
+					
+					default:
+						string[interval] = (char)(int)keys[i];
+						interval++;
+						this.xoffset += 10;
+				}
+				screen.getScreenFactory().getGame().getKeyboardListener().unpresskey(keys[i]);
+			}
 		}
 		
 		
