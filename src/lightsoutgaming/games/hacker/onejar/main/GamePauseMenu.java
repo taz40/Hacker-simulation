@@ -1,6 +1,7 @@
 package lightsoutgaming.games.hacker.onejar.main;
 
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
 
 import taz40.lightsoutgamingengine.V1.Button;
 import taz40.lightsoutgamingengine.V1.Function;
@@ -53,7 +54,10 @@ public class GamePauseMenu extends Screen {
 	@Override
 	public void onCustomUpdate() {
 		// TODO Auto-generated method stub
-		
+		if(screenfactory.getGame().getKeyboardListener().isKeyPressed(KeyEvent.VK_ESCAPE)){
+			screenfactory.showScreen(new GameScreen(screenfactory));
+			screenfactory.getGame().getKeyboardListener().unpresskey(KeyEvent.VK_ESCAPE);
+		}
 	}
 
 }

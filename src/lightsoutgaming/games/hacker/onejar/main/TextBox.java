@@ -52,8 +52,10 @@ public class TextBox extends Entity {
 		
 		int number = 0;
 		for(int i = 0; i < string.length; i++){
-			g.drawString(""+string[i], x+5+(number*10), y+15);
-			number++;
+			if(string[i] != (char) -1){
+				g.drawString(""+string[i], x+5+(number*10), y+15);
+				number++;
+			}
 		}
 		
 	}
@@ -90,7 +92,11 @@ public class TextBox extends Entity {
 			if(keys[i] != null){
 				switch(keys[i]){
 					case KeyEvent.VK_BACK_SPACE:
-						
+						if(interval > 0){
+							interval--;
+							string[interval] = (char) -1;
+							xoffset -= 10;
+						}
 					break;
 					
 					default:
