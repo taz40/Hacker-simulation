@@ -10,18 +10,20 @@ import javax.swing.JTextArea;
 import taz40.lightsoutgamingengine.V1.Screen;
 import taz40.lightsoutgamingengine.V1.ScreenFactory;
 
-public class GameScreen extends Screen {
+public class GameScreen extends Screen implements Receiver {
 
 	public GameScreen(ScreenFactory screenfactory) {
 		super(screenfactory);
 		// TODO Auto-generated constructor stub
 	}
 	
+	TextArea textArea = new TextArea(this,10,10, 780, 500);
+	TextBox textBox = new TextBox(this,10,515, 780, 20, this);
 
 	@Override
 	public void onCustomCreate() {
-		this.addEntity(new TextArea(this,10,10, 780, 500));
-		this.addEntity(new TextBox(this,10,515, 780, 20));
+		this.addEntity(textArea);
+		this.addEntity(textBox);
 	}
 
 	@Override
@@ -42,6 +44,13 @@ public class GameScreen extends Screen {
 			screenfactory.showScreen(new GamePauseMenu(screenfactory));
 			screenfactory.getGame().getKeyboardListener().unpresskey(KeyEvent.VK_ESCAPE);
 		}
+	}
+
+
+	@Override
+	public void Received(Object o, String msg) {
+		// TODO Auto-generated method stub
+		textArea.Received(this, msg);
 	}
 
 }

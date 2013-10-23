@@ -1,6 +1,7 @@
 package lightsoutgaming.games.hacker.onejar.main;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.util.Date;
@@ -10,13 +11,14 @@ import taz40.lightsoutgamingengine.V1.Screen;
 
 public class TextBox extends Entity {
 
-	public TextBox(Screen screen, int X, int Y, int W, int H) {
+	public TextBox(Screen screen, int X, int Y, int W, int H, Receiver recv1) {
 		super(screen);
 		// TODO Auto-generated constructor stub
 		x = X;
 		y = Y;
 		width = W;
 		height = H;
+		recv = recv1;
 	}
 	
 	int interval = 0;
@@ -27,6 +29,7 @@ public class TextBox extends Entity {
 	long prevtime = new Date().getTime();
 	int xoffset = 5;
 	boolean hasfocus = false;
+	Receiver recv;
 
 	@Override
 	public void onCustomCreate() {
@@ -97,6 +100,19 @@ public class TextBox extends Entity {
 							string[interval] = (char) -1;
 							xoffset -= 10;
 						}
+					break;
+					
+					case KeyEvent.VK_ENTER:
+						String fullstring = "";
+						for(int c = 0; c < string.length; c++){
+							if(string[c] != (char) -1){
+								fullstring += string[c];
+							}
+						}
+						recv.Received(this, fullstring);
+						xoffset = 5;
+						interval = 0;
+						string = new char[256];
 					break;
 					
 					default:

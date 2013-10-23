@@ -17,15 +17,13 @@ public class TextArea extends Entity implements Receiver {
 		height = H;
 	}
 	
+	int interval = 0;
 	String[] text = new String[50];
 	int x, y, width, height;
 
 	@Override
 	public void onCustomCreate() {
 		// TODO Auto-generated method stub
-		for(int i = 0; i < 50; i++){
-			text[i] = ""+i;
-		}
 	}
 
 	@Override
@@ -41,7 +39,9 @@ public class TextArea extends Entity implements Receiver {
 		g.fillRect(x, y, width, height);
 		g.setColor(Color.green);
 		for(int i = 0; i < 50; i++){
-			g.drawString(text[i], 11, (i*10)+20);
+			if(text[i] != null){
+				g.drawString(text[i], 11, (i*10)+20);
+			}
 		}
 	}
 
@@ -54,7 +54,8 @@ public class TextArea extends Entity implements Receiver {
 	@Override
 	public void Received(Object o, String msg) {
 		// TODO Auto-generated method stub
-		
+		text[interval] = msg;
+		interval++;
 	}
 
 }
