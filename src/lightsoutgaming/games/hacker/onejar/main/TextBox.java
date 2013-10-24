@@ -1,11 +1,16 @@
 package lightsoutgaming.games.hacker.onejar.main;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
+import java.awt.font.FontRenderContext;
+import java.awt.geom.AffineTransform;
 import java.util.Date;
+
+import javax.swing.UIManager;
 
 import taz40.lightsoutgamingengine.V1.Entity;
 import taz40.lightsoutgamingengine.V1.Screen;
@@ -43,7 +48,9 @@ public class TextBox extends Entity {
 	@Override
 	public void onCustomCreate() {
 		// TODO Auto-generated method stub
-		
+		for(int i = 0; i < string.length; i++){
+			string[i] = (char) -1;
+		}
 	}
 
 	@Override
@@ -61,17 +68,32 @@ public class TextBox extends Entity {
 		
 		
 		String fullstring = "";
+		int specialoffset = 5;
+		int interval = 0;
 		for(int c = 0; c < string.length; c++){
 			if(string[c] != (char) -1){
 				fullstring += string[c];
+				interval++;
+			}
+			if(interval == 4){
+				specialoffset += 1;
+				interval = 0;
 			}
 		}
 		
-		FontMetrics f = g.getFontMetrics();
-		xoffset = 5+f.stringWidth(fullstring);
+		if(fullstring.isEmpty()){
+			System.out.println("string is empty");
+			xoffset = 5;
+		}else{
+		AffineTransform affinetransform = new AffineTransform();     
+		FontRenderContext frc = new FontRenderContext(affinetransform,true,false);     
+		Font font = g.getFont();
+		xoffset = 5+(int)(font.getStringBounds(fullstring, frc).getWidth());
 		g.drawString(fullstring, x+5, y+15);
+		}
 		
 		if(underscore && hasfocus){
+			System.out.println("xoffset: "+xoffset);
 			g.drawString("_", x+xoffset, y+15);
 		}
 		
@@ -112,7 +134,6 @@ public class TextBox extends Entity {
 						if(interval > 0){
 							interval--;
 							string[interval] = (char) -1;
-							xoffset -= 10;
 						}
 					break;
 					
@@ -124,19 +145,19 @@ public class TextBox extends Entity {
 							}
 						}
 						recv.Received(this, fullstring);
-						xoffset = 5;
 						interval = 0;
-						string = new char[256];
+						for(int i1 = 0; i1 < string.length; i1++){
+							string[i1] = (char) -1;
+						}
 					break;
 					
 					default:
-						if(shifting){
+						//if(shifting){
 							string[interval] = (char)(int)keys[i];
-						}else{
-							string[interval] = toLowerCase((char)(int)keys[i]);
-						}
+						//}else{
+						//	string[interval] = toLowerCase((char)(int)keys[i]);
+						//}
 						interval++;
-						this.xoffset += 10;
 				}
 				screen.getScreenFactory().getGame().getKeyboardListener().unpresskey(keys[i]);
 			}

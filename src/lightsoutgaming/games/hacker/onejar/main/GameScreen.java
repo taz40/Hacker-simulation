@@ -17,7 +17,7 @@ public class GameScreen extends Screen implements Receiver {
 		// TODO Auto-generated constructor stub
 	}
 	
-	TextArea textArea = new TextArea(this,10,10, 780, 500);
+	TextArea textArea = new TextArea(this,10,10, 780, 502);
 	TextBox textBox = new TextBox(this,10,515, 780, 20, this);
 
 	@Override

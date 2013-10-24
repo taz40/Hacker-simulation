@@ -24,6 +24,10 @@ public class TextArea extends Entity implements Receiver {
 	@Override
 	public void onCustomCreate() {
 		// TODO Auto-generated method stub
+		/*for(int i = 0; i < 50; i++){
+			text[i] = ""+i;
+			interval++;
+		}*/
 	}
 
 	@Override
@@ -54,8 +58,20 @@ public class TextArea extends Entity implements Receiver {
 	@Override
 	public void Received(Object o, String msg) {
 		// TODO Auto-generated method stub
-		text[interval] = msg;
-		interval++;
+		if(interval == 50){
+			for(int i = 0; i < 50; i++){
+				if(i == 0){
+					text[i] = null;
+				}else{
+					text[i-1] = text[i];
+				}
+				
+			}
+			text[interval-1] = msg;
+		}else{
+			text[interval] = msg;
+			interval++;
+		}
 	}
 
 }
