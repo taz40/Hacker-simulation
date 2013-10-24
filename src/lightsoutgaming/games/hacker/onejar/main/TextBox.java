@@ -1,6 +1,7 @@
 package lightsoutgaming.games.hacker.onejar.main;
 
 import java.awt.Color;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
@@ -10,6 +11,13 @@ import taz40.lightsoutgamingengine.V1.Entity;
 import taz40.lightsoutgamingengine.V1.Screen;
 
 public class TextBox extends Entity {
+	
+	char toLowerCase(char c){
+	    if(c>=97 && c<=122)
+	        return (char) (c-32);
+	    else
+	        return c;
+	}
 
 	public TextBox(Screen screen, int X, int Y, int W, int H, Receiver recv1) {
 		super(screen);
@@ -30,6 +38,7 @@ public class TextBox extends Entity {
 	int xoffset = 5;
 	boolean hasfocus = false;
 	Receiver recv;
+	boolean shifting = false;
 
 	@Override
 	public void onCustomCreate() {
@@ -49,16 +58,21 @@ public class TextBox extends Entity {
 		g.setColor(Color.black);
 		g.fillRect(x, y, width, height);
 		g.setColor(Color.green);
-		if(underscore && hasfocus){
-			g.drawString("_", x+xoffset, y+15);
+		
+		
+		String fullstring = "";
+		for(int c = 0; c < string.length; c++){
+			if(string[c] != (char) -1){
+				fullstring += string[c];
+			}
 		}
 		
-		int number = 0;
-		for(int i = 0; i < string.length; i++){
-			if(string[i] != (char) -1){
-				g.drawString(""+string[i], x+5+(number*10), y+15);
-				number++;
-			}
+		FontMetrics f = g.getFontMetrics();
+		xoffset = 5+f.stringWidth(fullstring);
+		g.drawString(fullstring, x+5, y+15);
+		
+		if(underscore && hasfocus){
+			g.drawString("_", x+xoffset, y+15);
 		}
 		
 	}
@@ -116,7 +130,11 @@ public class TextBox extends Entity {
 					break;
 					
 					default:
-						string[interval] = (char)(int)keys[i];
+						if(shifting){
+							string[interval] = (char)(int)keys[i];
+						}else{
+							string[interval] = toLowerCase((char)(int)keys[i]);
+						}
 						interval++;
 						this.xoffset += 10;
 				}
