@@ -51,6 +51,33 @@ public class GameScreen extends Screen implements Receiver {
 	public void Received(Object o, String msg) {
 		// TODO Auto-generated method stub
 		textArea.Received(this, msg);
+		if(msg.equals("SHUTDOWN")){
+			textBox.on = false;
+			textBox.hasfocus = false;
+			textArea.Received(this, "SYSTEM SHUTDOWN IN PROGRESS...");
+			for(int i = 5; i >= 1; i--){
+			textArea.Received(this, i+"...");
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			}
+			textArea.Clear();
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			textArea.onCreate();
+			textBox.on = true;
+		}else if(msg.equals("CLEAR")){
+			textArea.Clear();
+		}else if(msg.equals("EXIT")){
+			screenfactory.showScreen(new MainMenu(screenfactory));
+		}
 	}
 
 }

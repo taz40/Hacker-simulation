@@ -28,6 +28,7 @@ public class TextArea extends Entity implements Receiver {
 			text[i] = ""+i;
 			interval++;
 		}*/
+		this.Received(this, "HACK OS 3.0");
 	}
 
 	@Override
@@ -72,6 +73,11 @@ public class TextArea extends Entity implements Receiver {
 			text[interval] = msg;
 			interval++;
 		}
+	}
+	
+	public void Clear(){
+		text = new String[50];
+		interval = 0;
 	}
 
 }

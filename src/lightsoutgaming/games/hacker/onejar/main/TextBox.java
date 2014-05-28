@@ -44,6 +44,7 @@ public class TextBox extends Entity {
 	boolean hasfocus = false;
 	Receiver recv;
 	boolean shifting = false;
+	boolean on = true;
 
 	@Override
 	public void onCustomCreate() {
@@ -82,7 +83,6 @@ public class TextBox extends Entity {
 		}
 		
 		if(fullstring.isEmpty()){
-			System.out.println("string is empty");
 			xoffset = 5;
 		}else{
 		AffineTransform affinetransform = new AffineTransform();     
@@ -93,7 +93,6 @@ public class TextBox extends Entity {
 		}
 		
 		if(underscore && hasfocus){
-			System.out.println("xoffset: "+xoffset);
 			g.drawString("_", x+xoffset, y+15);
 		}
 		
@@ -102,7 +101,7 @@ public class TextBox extends Entity {
 	@Override
 	public void onCustomUpdate() {
 		// TODO Auto-generated method stub
-		if(hasfocus){
+		if(hasfocus && on){
 		if(!underscore){
 			if(underscoretime >= 500){
 				underscore = true;
@@ -144,7 +143,14 @@ public class TextBox extends Entity {
 								fullstring += string[c];
 							}
 						}
-						recv.Received(this, fullstring);
+						final String fullstring2 = fullstring;
+						Thread recvt = new Thread("Process"){
+							public void run(){
+								recv.Received(this, fullstring2);
+							}
+						};
+						recvt.start();
+							
 						interval = 0;
 						for(int i1 = 0; i1 < string.length; i1++){
 							string[i1] = (char) -1;
@@ -165,7 +171,7 @@ public class TextBox extends Entity {
 		
 		
 		}
-			if(screen.getScreenFactory().getGame().getMousePadListener().isMousePressed()){
+			if(screen.getScreenFactory().getGame().getMousePadListener().isMousePressed() && on){
 				int crx = screen.getScreenFactory().getGame().getMousePadListener().getX();
 				int cry = screen.getScreenFactory().getGame().getMousePadListener().getY();
 				if(!screen.getScreenFactory().getGame().fullscreen){
@@ -180,6 +186,10 @@ public class TextBox extends Entity {
 				}else{
 					hasfocus = false;
 				}
+			}
+			if(screen.getScreenFactory().getGame().getKeyboardListener().isKeyPressed(KeyEvent.VK_ENTER) && !hasfocus && on){
+				hasfocus = true;
+				screen.getScreenFactory().getGame().getKeyboardListener().unpresskey(KeyEvent.VK_ENTER);
 			}
 	}
 
