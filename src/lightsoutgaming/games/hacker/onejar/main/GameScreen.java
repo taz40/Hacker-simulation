@@ -59,6 +59,8 @@ public class GameScreen extends Screen implements Receiver {
 		root = new FileSystem("ROOT", rootfolders, rootfiles);
 		rootfolders.get(0).parent = root;
 		currentdir = root;*/
+		loadFileSystem("C:\\Hacker-Sim\\HackingSimDemoFile.txt");
+		currentdir = root;
 	}
 
 	@Override
@@ -115,11 +117,11 @@ public class GameScreen extends Screen implements Receiver {
 		}else if(msg.equals("DIR")){
 			currentdir.list(textArea);
 		}else if(msg.startsWith("EXE")){
-			String name = msg.substring(4, msg.length());
+			String name = msg.split(" ")[1];
 			for(int i = 0; i < currentdir.files.size(); i++){
 				String capsname = currentdir.files.get(i).name.toUpperCase();
 				if(capsname.equals(name)){
-					currentdir.files.get(i).run();
+					currentdir.files.get(i).run(msg);
 					break;
 				}
 			}
@@ -142,7 +144,8 @@ public class GameScreen extends Screen implements Receiver {
 	}
 	
 	public void loadFileSystem(String string){
-		File f = new File("C:\\Hacker-Sim\\options.txt");
+		String newLine = System.getProperty("line.separator");
+		File f = new File(string);
     	if(f.exists()){
     		
     		BufferedReader br = null;
@@ -156,8 +159,38 @@ public class GameScreen extends Screen implements Receiver {
     		try {
     			FileSystem thisfolder = root = new FileSystem("ROOT", null);
 				while ((line = br.readLine()) != null) {
+					if(thisfolder == null) break;
 					if(line.startsWith("+")){
-						FileSystem nextfolder = new FileSystem(line.substring(3, line.length()), thisfolder);/////////////////
+						FileSystem nextfolder = new FileSystem(line.substring(2, line.length()).toUpperCase(), thisfolder);
+						thisfolder = nextfolder;
+					}
+					if(line.startsWith("=")){
+						FileSystem nextfolder = thisfolder.parent;
+						nextfolder.add(thisfolder);
+						thisfolder = nextfolder;
+					}
+					if(line.startsWith("-")){
+						int typeint = Integer.parseInt(line.substring(2, 3)); 
+						Type type = intToType(typeint);
+						if(type == Type.txt || type == Type.exe){
+							String data = line;
+							String content = "";
+							while((line = br.readLine()) != null){
+								if(line.startsWith("=")){
+									break;
+								}else{
+									if(!content.equals("")){
+										content += newLine;
+									}
+									content += line;
+								}
+							}
+							MyFile file = new MyFile(data.substring(4).toUpperCase(), type, content, textArea);
+							thisfolder.add(file);
+						}else if(type == Type.system){
+							MyFile file = new MyFile(line.substring(4).toUpperCase(), type, "", textArea);
+							thisfolder.add(file);
+						}
 					}
 				}
 				br.close();
@@ -168,6 +201,13 @@ public class GameScreen extends Screen implements Receiver {
     		
     	}else{
     	}
+	}
+	
+	public Type intToType(int i){
+		if(i == 0) return Type.txt;
+		if(i == 1) return Type.exe;
+		if(i == 2) return Type.system;
+		return null;
 	}
 
 }
