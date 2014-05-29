@@ -9,11 +9,9 @@ public class FileSystem {
 	public ArrayList<File> files = new ArrayList<File>();
 	public FileSystem parent;
 	
-	public FileSystem(String name, ArrayList<FileSystem> folders, ArrayList<File> files){
+	public FileSystem(String name, FileSystem parent){
 		this.parent = parent;
 		this.name = name;
-		this.folders = folders;
-		this.files = files;
 	}
 	
 	public void list(TextArea textarea){

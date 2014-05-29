@@ -4,6 +4,12 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JTextArea;
@@ -28,7 +34,7 @@ public class GameScreen extends Screen implements Receiver {
 	public void onCustomCreate() {
 		this.addEntity(textArea);
 		this.addEntity(textBox);
-		ArrayList<File> downloads = new ArrayList<File>();
+		/*ArrayList<File> downloads = new ArrayList<File>();
 		downloads.add(new File("STUFF.TXT", Type.txt, new Function(this){
 
 			@Override
@@ -52,7 +58,7 @@ public class GameScreen extends Screen implements Receiver {
 		rootfolders.add(new FileSystem("DOWNLOADS", new ArrayList<FileSystem>(), downloads));
 		root = new FileSystem("ROOT", rootfolders, rootfiles);
 		rootfolders.get(0).parent = root;
-		currentdir = root;
+		currentdir = root;*/
 	}
 
 	@Override
@@ -133,6 +139,35 @@ public class GameScreen extends Screen implements Receiver {
 				}
 			}
 		}
+	}
+	
+	public void loadFileSystem(String string){
+		File f = new File("C:\\Hacker-Sim\\options.txt");
+    	if(f.exists()){
+    		
+    		BufferedReader br = null;
+			try {
+				br = new BufferedReader(new FileReader(f));
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+    		String line;
+    		try {
+    			FileSystem thisfolder = root = new FileSystem("ROOT", null);
+				while ((line = br.readLine()) != null) {
+					if(line.startsWith("+")){
+						FileSystem nextfolder = new FileSystem(line.substring(3, line.length()), thisfolder);/////////////////
+					}
+				}
+				br.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    		
+    	}else{
+    	}
 	}
 
 }
