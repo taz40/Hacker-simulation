@@ -161,7 +161,7 @@ public class GameScreen extends Screen implements Receiver {
 				while ((line = br.readLine()) != null) {
 					if(thisfolder == null) break;
 					if(line.startsWith("+")){
-						FileSystem nextfolder = new FileSystem(line.substring(2, line.length()).toUpperCase(), thisfolder);
+						FileSystem nextfolder = new FileSystem(line.substring(2).toUpperCase(), thisfolder);
 						thisfolder = nextfolder;
 					}
 					if(line.startsWith("=")){
