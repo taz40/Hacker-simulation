@@ -23,7 +23,7 @@ public class MyFile {
 				text.Received(this, strings[i].toUpperCase());
 			}
 		}else if(type == Type.exe){
-			if(content.equals("crack")){
+			if(content.equals("crack") || content.equals("CRACK")){
 				String[] tokens = msg.split(" ");
 				if(tokens.length != 4){
 					text.Received(this, "Usage: " + tokens[1] + " <IP> <PORT>");

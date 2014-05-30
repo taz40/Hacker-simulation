@@ -12,7 +12,8 @@ public class Computer {
 	FileSystem root;
 	FileSystem currentdir;
 	Screen s;
-	
+	public String path;
+	public String help = "SHUTDOWN - REBOOTS THE COMPUTER/CLEAR - CLEARS THE COMPUTER TERMINAL/EXIT - QUITS THE GAME/DIR - SHOWS THE FOLDERS AND FILES IN THE CURRENT DIRECTORY/EXE <FILE> - EXECUTES THE FILE SPECIFIED/CD <DIR> - CHANGES THE CURRENT DIRECTORY/HELP - DISPLAYS THIS HELP MESSAGE";
 	
 	public Computer(int maxHealth, int totalProcessingPower, int maxBrainPower, Screen s){
 		health = this.maxHealth = maxHealth;
@@ -20,6 +21,10 @@ public class Computer {
 		brainPower = this.maxBrainPower = maxBrainPower;
 		ip = rand.nextInt(256) + "." + rand.nextInt(256) + "." + rand.nextInt(256) + "." + rand.nextInt();
 		this.s = s;
+	}
+	
+	public void init(){
+		path = root.name + "/";
 	}
 	
 	public void processCMD(String msg, TextBox box, TextArea area){
@@ -37,6 +42,9 @@ public class Computer {
 			}
 			}
 			area.Clear();
+			path = "";
+			box.prefex = "";
+			currentdir = root;
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
@@ -45,6 +53,7 @@ public class Computer {
 			}
 			area.onCreate();
 			box.on = true;
+			init();
 		}else if(msg.equals("CLEAR")){
 			area.Clear();
 		}else if(msg.equals("EXIT")){
@@ -64,6 +73,7 @@ public class Computer {
 			String name = msg.substring(3, msg.length());
 			if(name.equals("..")){
 				if(!currentdir.name.equals("ROOT")){
+					path = path.split(currentdir.name + "/")[0];
 					currentdir = currentdir.parent;
 				}
 			}else{
@@ -71,9 +81,15 @@ public class Computer {
 					String capsname = currentdir.folders.get(i).name.toUpperCase();
 					if(capsname.equals(name)){
 						currentdir = currentdir.folders.get(i);
+						path += currentdir.name + "/";
 						break;
 					}
 				}
+			}
+		}else if(msg.startsWith("HELP")){
+			String[] tokens = help.split("/");
+			for(int i = 0; i < tokens.length; i++){
+				area.Received(this, tokens[i]);
 			}
 		}
 	}

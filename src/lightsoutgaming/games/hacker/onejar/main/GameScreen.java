@@ -23,6 +23,11 @@ public class GameScreen extends Screen implements Receiver {
 	public GameScreen(ScreenFactory screenfactory) {
 		super(screenfactory);
 		// TODO Auto-generated constructor stub
+		this.addEntity(textArea);
+		this.addEntity(textBox);
+		loadFileSystem("C:\\Hacker-Sim\\HackingSimDemoFile.txt");
+		comp.currentdir = comp.root;
+		comp.init();
 	}
 	
 	TextArea textArea = new TextArea(this,10,10, 780, 502);
@@ -31,41 +36,14 @@ public class GameScreen extends Screen implements Receiver {
 
 	@Override
 	public void onCustomCreate() {
-		this.addEntity(textArea);
-		this.addEntity(textBox);
-		/*ArrayList<File> downloads = new ArrayList<File>();
-		downloads.add(new File("STUFF.TXT", Type.txt, new Function(this){
-
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				((GameScreen)s).textArea.Received(this, "testing stuff. testing 1...2...3");
-			}
-			
-		}));
-		ArrayList<File> rootfiles = new ArrayList<File>();
-		rootfiles.add(new File("MAIN.WIN", Type.system, new Function(this){
-
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				((GameScreen)s).textArea.Received(this, "ACCESS DENIED, SYSTEM FILE");
-			}
-			
-		}));
-		ArrayList<FileSystem> rootfolders = new ArrayList<FileSystem>();
-		rootfolders.add(new FileSystem("DOWNLOADS", new ArrayList<FileSystem>(), downloads));
-		root = new FileSystem("ROOT", rootfolders, rootfiles);
-		rootfolders.get(0).parent = root;
-		currentdir = root;*/
-		loadFileSystem("C:\\Hacker-Sim\\HackingSimDemoFile.txt");
-		comp.currentdir = comp.root;
+		
 	}
 
 	@Override
 	public void onCustomDestroy() {
 		// TODO Auto-generated method stub
 		//screenfactory.getGame().gamethread.remove(jtext);
+		System.out.println("destroy");
 	}
 
 	@Override
@@ -77,16 +55,17 @@ public class GameScreen extends Screen implements Receiver {
 	public void onCustomUpdate() {
 		// TODO Auto-generated method stub
 		if(screenfactory.getGame().getKeyboardListener().isKeyPressed(KeyEvent.VK_ESCAPE)){
-			screenfactory.showScreen(new GamePauseMenu(screenfactory));
+			screenfactory.showScreen(new GamePauseMenu(screenfactory, this));
 			screenfactory.getGame().getKeyboardListener().unpresskey(KeyEvent.VK_ESCAPE);
 		}
+		if(!comp.path.equals(""))textBox.prefex = comp.path + " > ";
 	}
 
 
 	@Override
 	public void Received(Object o, String msg) {
 		// TODO Auto-generated method stub
-		textArea.Received(this, msg);
+		textArea.Received(this, comp.path + " > " + msg);
 		comp.processCMD(msg, textBox, textArea);
 	}
 	

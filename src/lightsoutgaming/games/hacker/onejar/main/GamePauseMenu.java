@@ -10,8 +10,11 @@ import taz40.lightsoutgamingengine.V1.ScreenFactory;
 
 public class GamePauseMenu extends Screen {
 
-	public GamePauseMenu(ScreenFactory screenfactory) {
+	GameScreen game;
+	
+	public GamePauseMenu(ScreenFactory screenfactory, GameScreen game) {
 		super(screenfactory);
+		this.game = game;
 		// TODO Auto-generated constructor stub
 	}
 
@@ -23,7 +26,7 @@ public class GamePauseMenu extends Screen {
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				s.getScreenFactory().showScreen(new GameScreen(s.getScreenFactory()));
+				s.getScreenFactory().showScreen(game);
 			}
 			
 		}, this));

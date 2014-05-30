@@ -35,6 +35,7 @@ public class TextBox extends Entity {
 	}
 	
 	int interval = 0;
+	public String prefex = "";
 	char[] string = new char[256];
 	int underscoretime;
 	boolean underscore = true;
@@ -66,6 +67,10 @@ public class TextBox extends Entity {
 		g.setColor(Color.black);
 		g.fillRect(x, y, width, height);
 		g.setColor(Color.green);
+		if(prefex != null) g.drawString(prefex, x+5, y+15);
+		AffineTransform affinetransform = new AffineTransform();     
+		FontRenderContext frc = new FontRenderContext(affinetransform,true,false);     
+		Font font = g.getFont();
 		
 		
 		String fullstring = "";
@@ -85,15 +90,12 @@ public class TextBox extends Entity {
 		if(fullstring.isEmpty()){
 			xoffset = 5;
 		}else{
-		AffineTransform affinetransform = new AffineTransform();     
-		FontRenderContext frc = new FontRenderContext(affinetransform,true,false);     
-		Font font = g.getFont();
 		xoffset = 5+(int)(font.getStringBounds(fullstring, frc).getWidth());
-		g.drawString(fullstring, x+5, y+15);
+		g.drawString(fullstring, (int) (x+5+font.getStringBounds(prefex, frc).getWidth()), y+15);
 		}
 		
 		if(underscore && hasfocus){
-			g.drawString("_", x+xoffset, y+15);
+			g.drawString("_", (int) (x+xoffset+font.getStringBounds(prefex, frc).getWidth()), y+15);
 		}
 		
 	}
