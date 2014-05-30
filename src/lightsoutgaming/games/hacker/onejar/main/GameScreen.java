@@ -27,8 +27,7 @@ public class GameScreen extends Screen implements Receiver {
 	
 	TextArea textArea = new TextArea(this,10,10, 780, 502);
 	TextBox textBox = new TextBox(this,10,515, 780, 20, this);
-	FileSystem root;
-	FileSystem currentdir;
+	Computer comp = new Computer(100, 100, 100, this);
 
 	@Override
 	public void onCustomCreate() {
@@ -60,7 +59,7 @@ public class GameScreen extends Screen implements Receiver {
 		rootfolders.get(0).parent = root;
 		currentdir = root;*/
 		loadFileSystem("C:\\Hacker-Sim\\HackingSimDemoFile.txt");
-		currentdir = root;
+		comp.currentdir = comp.root;
 	}
 
 	@Override
@@ -88,59 +87,7 @@ public class GameScreen extends Screen implements Receiver {
 	public void Received(Object o, String msg) {
 		// TODO Auto-generated method stub
 		textArea.Received(this, msg);
-		if(msg.equals("SHUTDOWN")){
-			textBox.on = false;
-			textBox.hasfocus = false;
-			textArea.Received(this, "SYSTEM SHUTDOWN IN PROGRESS...");
-			for(int i = 5; i >= 1; i--){
-			textArea.Received(this, i+"...");
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			}
-			textArea.Clear();
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			textArea.onCreate();
-			textBox.on = true;
-		}else if(msg.equals("CLEAR")){
-			textArea.Clear();
-		}else if(msg.equals("EXIT")){
-			screenfactory.showScreen(new MainMenu(screenfactory));
-		}else if(msg.equals("DIR")){
-			currentdir.list(textArea);
-		}else if(msg.startsWith("EXE")){
-			String name = msg.split(" ")[1];
-			for(int i = 0; i < currentdir.files.size(); i++){
-				String capsname = currentdir.files.get(i).name.toUpperCase();
-				if(capsname.equals(name)){
-					currentdir.files.get(i).run(msg);
-					break;
-				}
-			}
-		}else if(msg.startsWith("CD")){
-			String name = msg.substring(3, msg.length());
-			if(name.equals("..")){
-				if(!currentdir.name.equals("ROOT")){
-					currentdir = currentdir.parent;
-				}
-			}else{
-				for(int i = 0; i < currentdir.folders.size(); i++){
-					String capsname = currentdir.folders.get(i).name.toUpperCase();
-					if(capsname.equals(name)){
-						currentdir = currentdir.folders.get(i);
-						break;
-					}
-				}
-			}
-		}
+		comp.processCMD(msg, textBox, textArea);
 	}
 	
 	public void loadFileSystem(String string){
@@ -157,7 +104,7 @@ public class GameScreen extends Screen implements Receiver {
 			}
     		String line;
     		try {
-    			FileSystem thisfolder = root = new FileSystem("ROOT", null);
+    			FileSystem thisfolder = comp.root = new FileSystem("ROOT", null);
 				while ((line = br.readLine()) != null) {
 					if(thisfolder == null) break;
 					if(line.startsWith("+")){
