@@ -58,7 +58,7 @@ public class GamePauseMenu extends Screen {
 	public void onCustomUpdate() {
 		// TODO Auto-generated method stub
 		if(screenfactory.getGame().getKeyboardListener().isKeyPressed(KeyEvent.VK_ESCAPE)){
-			screenfactory.showScreen(new GameScreen(screenfactory));
+			screenfactory.showScreen(game);
 			screenfactory.getGame().getKeyboardListener().unpresskey(KeyEvent.VK_ESCAPE);
 		}
 	}
