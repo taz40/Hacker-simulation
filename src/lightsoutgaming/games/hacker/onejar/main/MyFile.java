@@ -16,20 +16,22 @@ public class MyFile {
 		text = textarea;
 	}
 	
-	public void run(String msg){
+	public void run(String msg, Computer comp){
 		if(type == Type.txt){
 			String[] strings = content.split(newLine);
 			for(int i = 0; i < strings.length; i++){
 				text.Received(this, strings[i].toUpperCase());
 			}
 		}else if(type == Type.exe){
-			if(content.equals("crack") || content.equals("CRACK")){
-				String[] tokens = msg.split(" ");
-				if(tokens.length != 4){
-					text.Received(this, "Usage: " + tokens[1] + " <IP> <PORT>");
-				}else{
-					
-				}
+			String[] cmds = content.split(newLine);
+			for(int i = 0; i < cmds.length; i++){
+				String cmd = cmds[i];
+				if(cmd.startsWith("scan")){
+					String[] args = cmd.split(" ");
+					int port = Integer.parseInt(args[1]);
+					Boolean portOpen = comp.scanPort(port);
+					text.Received(this, Boolean.toString(portOpen));
+				}// add port scan cmd for .exe files
 			}
 		}else if(type == Type.system){
 			text.Received(this, "ACCESS DENIED");

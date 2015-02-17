@@ -1,6 +1,7 @@
 package lightsoutgaming.games.hacker.onejar.main;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
@@ -33,6 +34,7 @@ public class GameScreen extends Screen implements Receiver {
 	TextArea textArea = new TextArea(this,10,10, 780, 502);
 	TextBox textBox = new TextBox(this,10,515, 780, 20, this);
 	Computer comp = new Computer(100, 100, 100, this);
+	Computer ecomp = new Computer(100, 100, 100, null);
 
 	@Override
 	public void onCustomCreate() {
@@ -49,6 +51,10 @@ public class GameScreen extends Screen implements Receiver {
 	@Override
 	public void onCustomDraw(Graphics2D g) {
 		// TODO Auto-generated method stub
+		g.setColor(Color.black);
+		g.fillRect(10, 540, 100, 12);
+		g.setColor(Color.green);
+		g.drawString(comp.ip, 10, 550);
 	}
 
 	@Override
@@ -105,6 +111,12 @@ public class GameScreen extends Screen implements Receiver {
 								if(line.startsWith("=")){
 									break;
 								}else{
+									if(line.contains("%ip")){
+										line = line.replace("%ip", comp.ip);
+									}
+									if(line.contains("%eip")){
+										line = line.replace("%eip", ecomp.ip);
+									}
 									if(!content.equals("")){
 										content += newLine;
 									}

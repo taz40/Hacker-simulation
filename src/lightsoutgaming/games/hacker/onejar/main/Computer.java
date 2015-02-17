@@ -7,6 +7,7 @@ import taz40.lightsoutgamingengine.V1.Screen;
 public class Computer {
 
 	public int health, maxHealth, processingPower, totalProcessingPower, brainPower, maxBrainPower;
+	public boolean[] ports = new boolean[256];
 	public String ip;
 	public static Random rand = new Random();
 	FileSystem root;
@@ -19,7 +20,7 @@ public class Computer {
 		health = this.maxHealth = maxHealth;
 		processingPower = this.totalProcessingPower = totalProcessingPower;
 		brainPower = this.maxBrainPower = maxBrainPower;
-		ip = rand.nextInt(256) + "." + rand.nextInt(256) + "." + rand.nextInt(256) + "." + rand.nextInt();
+		ip = rand.nextInt(256) + "." + rand.nextInt(256) + "." + rand.nextInt(256) + "." + rand.nextInt(256);
 		this.s = s;
 	}
 	
@@ -65,7 +66,7 @@ public class Computer {
 			for(int i = 0; i < currentdir.files.size(); i++){
 				String capsname = currentdir.files.get(i).name.toUpperCase();
 				if(capsname.equals(name)){
-					currentdir.files.get(i).run(msg);
+					currentdir.files.get(i).run(msg, this);
 					break;
 				}
 			}
@@ -92,6 +93,16 @@ public class Computer {
 				area.Received(this, tokens[i]);
 			}
 		}
+	}
+	
+	public boolean scanPort(int portnum){
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return ports[portnum];
 	}
 	
 }
